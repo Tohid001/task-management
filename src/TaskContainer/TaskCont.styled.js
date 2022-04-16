@@ -10,6 +10,7 @@ export const TaskList = styled.div`
 export const Header = styled.div`
   font-weight: bold;
   font-size: 1.2rem;
+  display: flex;
 `;
 
 export const Row = styled.div``;

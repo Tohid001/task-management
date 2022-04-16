@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import AssignTaskForm from "../Form/AssignTaskForm.js";
 import Table from "./Table.js";
 
-const initialState = { title: "", description: "", startDate: "", endDate: "" };
+const initialState = {
+  registryTime: "",
+  title: "",
+  description: "",
+  startDate: "",
+  endDate: "",
+};
 
 function TaskContainer() {
   const [taskList, setTaskList] = useState([]);
@@ -14,7 +20,7 @@ function TaskContainer() {
     });
   };
 
-  console.log(taskList);
+  console.log("taskList", taskList);
 
   return (
     <>
@@ -34,7 +40,7 @@ function TaskContainer() {
           modal={setOpenModal}
         />
       )}
-      <Table tasklist={taskList} />
+      <Table taskObj={{ taskList, setTaskList }} />
     </>
   );
 }

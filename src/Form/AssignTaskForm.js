@@ -16,7 +16,7 @@ function Form({ submitHandler, initialState, modal }) {
 
   //   console.log(formstates);
 
-  const { title, description, startDate, endDate } = formstates;
+  const { registryTime, title, description, startDate, endDate } = formstates;
 
   return (
     <>
@@ -24,13 +24,25 @@ function Form({ submitHandler, initialState, modal }) {
         onSubmit={(e) => {
           e.preventDefault();
           submitHandler(e, {
-            [startDate]: [{ id: v4(), title, description, endDate }],
+            [registryTime]: [
+              { id: v4(), title, description, endDate, startDate },
+            ],
           });
           modal((prev) => {
             return !prev;
           });
         }}
       >
+        <TextInputContainer>
+          <DateInput
+            required={true}
+            name="registryTime"
+            state={registryTime}
+            onChangeHandler={onChangeHandler}
+            label="Registry Date"
+            //   placeholder="69 street, J.F.K area"
+          />
+        </TextInputContainer>
         <TextInputContainer>
           <TextInput
             name="title"
@@ -60,6 +72,7 @@ function Form({ submitHandler, initialState, modal }) {
             state={startDate}
             onChangeHandler={onChangeHandler}
             label="Start Date"
+            type="datetime-local"
             //   placeholder="69 street, J.F.K area"
           />
         </TextInputContainer>
@@ -71,6 +84,7 @@ function Form({ submitHandler, initialState, modal }) {
             state={endDate}
             onChangeHandler={onChangeHandler}
             label="End Date"
+            type="datetime-local"
             //   placeholder="Web developer"
           />
         </TextInputContainer>

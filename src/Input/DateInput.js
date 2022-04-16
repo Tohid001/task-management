@@ -7,6 +7,7 @@ function DateInput({
   onChangeHandler,
   placeholder,
   label,
+  type = "date",
 }) {
   const inputRef = useRef(null);
   // useEffect(() => {
@@ -19,7 +20,7 @@ function DateInput({
         required={required}
         ref={inputRef}
         id={name}
-        type="date"
+        type={type}
         value={state}
         name={name}
         placeholder={placeholder}

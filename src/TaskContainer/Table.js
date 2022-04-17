@@ -1,20 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Table.css";
-import { AiFillDelete } from "react-icons/ai";
+import { AiFillDelete, AiOutlinePlus } from "react-icons/ai";
 import EditableCell from "./EditableCell.js";
 import { TextInput, DateInput } from "../Input/index.js";
+import AssignTaskForm from "../Form/AssignTaskForm.js";
 
-function Table({ taskObj: { taskList, setTaskList } }) {
-  console.log("taskList", taskList);
+function Table({
+  submitHandler,
+  initialState,
+  deleteHandler,
+  taskObj: { taskList, setTaskList },
+}) {
+  const [openModal, setOpenModal] = useState(false);
+
+  const [rT, setRt] = useState();
+
+  console.log("rt", rT);
+
   const taskInfoFieldUpdateHandler = (id, date, update) => {
     const index = taskList.findIndex((task) => {
-      // console.log(new Date(`${Object.keys(task)[0]}`).getDate());
       return (
         new Date(`${Object.keys(task)[0]}`).getDate() ===
         new Date(`${date}`).getDate()
       );
     });
-    // console.log(id, date, new Date(`${date}`).getDate());
 
     const newTasks = [...taskList];
 
@@ -24,8 +33,25 @@ function Table({ taskObj: { taskList, setTaskList } }) {
 
     const newNestTasks = [...newTasks[index][`${date}`]];
     newNestTasks[nestIndex] = { ...newNestTasks[nestIndex], ...update };
-    // console.log({ ...newNestTasks[nestIndex], ...update });
+
     newTasks[index][`${date}`] = newNestTasks;
+
+    setTaskList([...newTasks]);
+  };
+
+  const addTasktoSpecificRehgistryDate = (date, update) => {
+    const index = taskList.findIndex((task) => {
+      return (
+        new Date(`${Object.keys(task)[0]}`).getDate() ===
+        new Date(`${date}`).getDate()
+      );
+    });
+
+    const newTasks = [...taskList];
+
+    newTasks[index][`${date}`].push(update);
+
+    console.log("heheheheheheh", newTasks[index][`${date}`], date);
 
     setTaskList([...newTasks]);
   };
@@ -54,8 +80,30 @@ function Table({ taskObj: { taskList, setTaskList } }) {
               return (
                 <>
                   <tr>
-                    <th rowSpan={task[Object.keys(task)[0]].length + 1}>
+                    <th
+                      id="date"
+                      rowSpan={task[Object.keys(task)[0]].length + 1}
+                    >
                       {Object.keys(task)[0]}
+                      <span
+                        onClick={() => {
+                          setOpenModal((prev) => !prev);
+                          setRt(Object.keys(task)[0]);
+                        }}
+                      >
+                        <AiOutlinePlus />
+                      </span>
+                      {openModal && (
+                        <AssignTaskForm
+                          submitHandler={addTasktoSpecificRehgistryDate}
+                          initialState={{
+                            ...initialState,
+                            registryTime: rT,
+                          }}
+                          modal={setOpenModal}
+                          nest={true}
+                        />
+                      )}
                     </th>
                   </tr>
                   {task[Object.keys(task)[0]].map((nestTask, nestTaskId) => {
@@ -96,6 +144,7 @@ function Table({ taskObj: { taskList, setTaskList } }) {
                               return (
                                 <TextInput
                                   {...options}
+                                  type="textarea"
                                   placeholder="enter description"
                                 />
                               );
@@ -137,7 +186,11 @@ function Table({ taskObj: { taskList, setTaskList } }) {
                           </EditableCell>
                         </td>
                         <td className="actions">
-                          <span onClick={() => {}}>
+                          <span
+                            onClick={() => {
+                              deleteHandler(nestTask.id, Object.keys(task)[0]);
+                            }}
+                          >
                             <AiFillDelete />
                           </span>
                         </td>

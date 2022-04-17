@@ -8,9 +8,10 @@ import {
   FormContainer,
   TextInputContainer,
   ButtonContainer,
+  CancelButton,
 } from "./Form.styled.js";
 
-function Form({ submitHandler, initialState, modal }) {
+function Form({ nest = false, submitHandler, initialState, modal }) {
   const [formstates, setFormstates, onChangeHandler, resetHandler] =
     useForm(initialState);
 
@@ -18,31 +19,55 @@ function Form({ submitHandler, initialState, modal }) {
 
   const { registryTime, title, description, startDate, endDate } = formstates;
 
+  console.log("ini", initialState);
+
   return (
     <>
       <FormContainer
         onSubmit={(e) => {
           e.preventDefault();
-          submitHandler(e, {
-            [registryTime]: [
-              { id: v4(), title, description, endDate, startDate },
-            ],
-          });
+          if (!nest) {
+            submitHandler(e, {
+              [registryTime]: [
+                { id: v4(), title, description, endDate, startDate },
+              ],
+            });
+          } else {
+            submitHandler(registryTime, {
+              id: v4(),
+              title,
+              description,
+              endDate,
+              startDate,
+            });
+          }
+
           modal((prev) => {
             return !prev;
           });
         }}
       >
-        <TextInputContainer>
-          <DateInput
-            required={true}
-            name="registryTime"
-            state={registryTime}
-            onChangeHandler={onChangeHandler}
-            label="Registry Date"
-            //   placeholder="69 street, J.F.K area"
-          />
-        </TextInputContainer>
+        <CancelButton
+          onClick={() => {
+            modal((prev) => {
+              return !prev;
+            });
+          }}
+        >
+          Cancel
+        </CancelButton>
+        {!nest && (
+          <TextInputContainer>
+            <DateInput
+              required={!nest}
+              name="registryTime"
+              state={registryTime}
+              onChangeHandler={onChangeHandler}
+              label="Registry Date"
+              disabled={nest}
+            />
+          </TextInputContainer>
+        )}
         <TextInputContainer>
           <TextInput
             name="title"
@@ -62,6 +87,7 @@ function Form({ submitHandler, initialState, modal }) {
             onChangeHandler={onChangeHandler}
             label="Task Description"
             placeholder="Enter  Task description"
+            type="textarea"
           />
         </TextInputContainer>
 

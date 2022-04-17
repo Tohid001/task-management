@@ -8,6 +8,7 @@ function TextInput({
   autoFocus = true,
   placeholder,
   label,
+  type = "text",
 }) {
   const inputRef = useRef(null);
   // useEffect(() => {
@@ -20,7 +21,7 @@ function TextInput({
         required={required}
         ref={inputRef}
         id={name}
-        type="text"
+        type={type}
         value={state}
         name={name}
         placeholder={placeholder}

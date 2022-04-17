@@ -3,13 +3,26 @@ import styled from "styled-components";
 export const FormContainer = styled.form`
   border-radius: 5px;
   position: fixed;
-  top: 0;
+  /* top: 0; */
+  bottom: 0;
   background: black;
   padding: 0.8rem;
   width: 50%;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  z-index: 100;
+`;
+
+export const CancelButton = styled.button`
+  all: unset;
+  background: gray;
+  color: red;
+  font-style: bold;
+  width: 10%;
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
 `;
 
 export const TextInputContainer = styled.div`

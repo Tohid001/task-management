@@ -20,6 +20,25 @@ function TaskContainer() {
     });
   };
 
+  const deleteHandler = (id, date) => {
+    const index = taskList.findIndex((task) => {
+      return (
+        new Date(`${Object.keys(task)[0]}`).getDate() ===
+        new Date(`${date}`).getDate()
+      );
+    });
+
+    const newTasks = [...taskList];
+
+    const filteredNest = newTasks[index][`${date}`].filter((task) => {
+      return !(task.id === id);
+    });
+
+    newTasks[index][`${date}`] = filteredNest;
+
+    setTaskList([...newTasks]);
+  };
+
   console.log("taskList", taskList);
 
   return (
@@ -40,7 +59,13 @@ function TaskContainer() {
           modal={setOpenModal}
         />
       )}
-      <Table taskObj={{ taskList, setTaskList }} />
+      <Table
+        deleteHandler={deleteHandler}
+        taskObj={{ taskList, setTaskList }}
+        submitHandler={addTask}
+        initialState={initialState}
+        modal={{ openModal, setOpenModal }}
+      />
     </>
   );
 }
